@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="头文件\ImguiStanderHeadFile">
+      <UniqueIdentifier>{500850ac-6505-46a0-bec7-8d1f5d5d8956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\ImguiStanderScoureFile">
+      <UniqueIdentifier>{be3d1dda-7271-4219-9e33-7c15d8f938c9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="imgui\include\imconfig.h">
+      <Filter>头文件\ImguiStanderHeadFile</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\include\imgui.h">
+      <Filter>头文件\ImguiStanderHeadFile</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\include\imgui_impl_dx11.h">
+      <Filter>头文件\ImguiStanderHeadFile</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\include\imgui_impl_win32.h">
+      <Filter>头文件\ImguiStanderHeadFile</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\include\imgui_internal.h">
+      <Filter>头文件\ImguiStanderHeadFile</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\include\imstb_rectpack.h">
+      <Filter>头文件\ImguiStanderHeadFile</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\include\imstb_textedit.h">
+      <Filter>头文件\ImguiStanderHeadFile</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\include\imstb_truetype.h">
+      <Filter>头文件\ImguiStanderHeadFile</Filter>
+    </ClInclude>
+    <ClInclude Include="M_IMGUI.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\source\imgui_impl_win32.h">
+      <Filter>源文件\ImguiStanderScoureFile</Filter>
+    </ClInclude>
+    <ClInclude Include="M_TYPE_DEF.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Translation.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Rotation.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix3x3.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="imgui\source\imgui.cpp">
+      <Filter>源文件\ImguiStanderScoureFile</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\source\imgui_draw.cpp">
+      <Filter>源文件\ImguiStanderScoureFile</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\source\imgui_impl_dx11.cpp">
+      <Filter>源文件\ImguiStanderScoureFile</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\source\imgui_impl_win32.cpp">
+      <Filter>源文件\ImguiStanderScoureFile</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\source\imgui_tables.cpp">
+      <Filter>源文件\ImguiStanderScoureFile</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\source\imgui_widgets.cpp">
+      <Filter>源文件\ImguiStanderScoureFile</Filter>
+    </ClCompile>
+    <ClCompile Include="WinMain.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="M_TYPE_DEF.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="M_IMGUI.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
