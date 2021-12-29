@@ -1,5 +1,6 @@
 #include "M_IMGUI.h"
 #include "Camera.hpp"
+#include <winbase.h>
 
 using namespace infinity;
 
@@ -105,7 +106,7 @@ VOID RenderCallBack() {
     static infinity::Vector2 axisBegin,axisEnd;
     static infinity::Vector2 quadrantVertex[4];
 
-    ++rotateAngle;
+    //++rotateAngle;
 
     g_Camera.worldToScreen(Vector3(99.0f, 99.0f, 0), quadrantVertex[0]);
     g_Camera.worldToScreen(Vector3(-99.0f, 99.0f, 0), quadrantVertex[1]);
@@ -149,7 +150,7 @@ VOID RenderCallBack() {
 
 
 // Main code
-INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdline, int nComshow){
+INT WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ INT nCmdShow) {
     
     if (!InitCreateDrawWindow(NULL))
         return -1;
