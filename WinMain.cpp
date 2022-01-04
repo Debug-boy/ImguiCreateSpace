@@ -4,9 +4,9 @@
 
 using namespace infinity;
 
-static float g_Roll, g_Pitch, g_Yaw;
-static infinity::Translation g_Translation(0, 0, 0);
-static infinity::Vector2 g_SpaceRenderSize(g_mWindowRect.w, 500);
+static float g_Roll = -90.0f, g_Pitch = 135.0f, g_Yaw;
+static infinity::Translation g_Translation(0.0f, 180.0f, -200.0f);
+static infinity::Vector2 g_SpaceRenderSize(g_mWindowRect.w, 400);
 static infinity::Camera g_Camera(Rotation(g_Roll, g_Pitch, g_Yaw), g_Translation, g_SpaceRenderSize);
 
 float f(float x) {
@@ -52,7 +52,7 @@ void drawPhysicsLine() {
     for (float x = -4; x <= 4; x += 0.01f, pre = cur) {
         float y = x * x;
 
-        g_Camera.worldToScreen(infinity::Vector3(x * 30, -y * 30, 0), cur);
+        g_Camera.worldToScreen(infinity::Vector3(x * 30,0, y * 30), cur);
         if(pre.x>0)
             ImGui::GetForegroundDrawList()->AddLine(pre, cur, ImColor(0, 255, 0, 0xff), 2);
 
@@ -89,10 +89,13 @@ VOID RenderCallBack() {
     
     
     ImGui::NewLine();
+    static struct {
+        bool roll; bool pitch; bool yaw;
+    }auto_rotate;
     ImGui::Text("CameraRotation");
-    ImGui::SliderFloat("Roll", &g_Roll, -180.0f, 180.0f);
-    ImGui::SliderFloat("Pitch", &g_Pitch, -180.0f, 180.0f);
-    ImGui::SliderFloat("Yaw", &g_Yaw, -180.0f, 180.0f);
+    ImGui::Checkbox("Auto Rotate", &auto_rotate.roll); ImGui::SameLine(); ImGui::SliderFloat("Roll", &g_Roll, -180.0f, 180.0f);
+    ImGui::Checkbox("Auto  pitch", &auto_rotate.pitch);  ImGui::SameLine(); ImGui::SliderFloat("Pitch", &g_Pitch, -180.0f, 180.0f);
+    ImGui::Checkbox("Auto    yaw", &auto_rotate.yaw); ImGui::SameLine(); ImGui::SliderFloat("Yaw", &g_Yaw, -180.0f, 180.0f);
     g_Camera.setRotation(g_Roll * M_RAD, g_Pitch * M_RAD, g_Yaw * M_RAD);
 
     
@@ -139,11 +142,12 @@ VOID RenderCallBack() {
         }
     }
 
-    drawHeart();
-    //drawPhysicsLine();
-    //drawCube(Vector3(0, 0, -99), 5, ImColor(0xFF, 0xFF, 0, 0xFF));
+    //drawHeart();
+    drawPhysicsLine();
+    drawCube(Vector3(0, 0, -99), 5, ImColor(0xFF, 0xFF, 0, 0xFF));
 
     ImGui::End();
+
     SleepEx(ImGui::GetIO().Framerate * 2, true);
 }
 

@@ -73,12 +73,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <ExternalIncludePath>E:\VisualStudioProject\ImguiCreateSpace\imgui\include;D:\Microsoft DirectX SDK %28June 2010%29\Include;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>D:\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>D:\DirectX11SDK\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\VisualStudioProcjet\ImguiCreateSpace\imgui\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <ExternalIncludePath>E:\VisualStudioProject\ImguiCreateSpace\imgui\include;D:\Microsoft DirectX SDK %28June 2010%29\Include;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>D:\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>D:\DirectX11SDK\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\VisualStudioProcjet\ImguiCreateSpace\imgui\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
