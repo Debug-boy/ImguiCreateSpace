@@ -1,13 +1,28 @@
 #include "M_IMGUI.h"
 #include "Camera.hpp"
+#include "Axis.hpp"
 #include <winbase.h>
+#include <string>
 
 using namespace infinity;
+using namespace std;
 
 static float g_Roll = -90.0f, g_Pitch = 135.0f, g_Yaw;
-static infinity::Translation g_Translation(0.0f, 180.0f, -200.0f);
-static infinity::Vector2 g_SpaceRenderSize(g_mWindowRect.w, 400);
+static float g_scale = 10.0f;
+static infinity::Translation g_Translation(0.0f, 270.0f, -200.0f);
+static infinity::Vector2 g_SpaceRenderSize(g_mWindowRect.w, 250.0f);
 static infinity::Camera g_Camera(Rotation(g_Roll, g_Pitch, g_Yaw), g_Translation, g_SpaceRenderSize);
+
+static float axisXmax = 100.0f;
+static float axisYmax = 100.0f;
+static float axisZmax = 400.0f;
+
+typedef float (*fun_callback)(float x);
+
+
+float line(float x) {
+    return x - 4;
+}
 
 float f(float x) {
     return sqrtf(1.0f - powf(fabs(x) - 1.0, 2.0f));
@@ -16,8 +31,6 @@ float f(float x) {
 float g(float x) {
     return acosf(1.0f - fabs(x)) - 3.0f;
 }
-
-static float rotateAngle;
 
 Vector2 relativeRotation(const Vector2& origin, const Vector2& relative, float angle) {
     float dx = origin.x - relative.x;
@@ -50,12 +63,10 @@ void drawHeart() {
 void drawPhysicsLine() {
     Vector2 cur, pre;
     for (float x = -4; x <= 4; x += 0.01f, pre = cur) {
-        float y = x * x;
-
-        g_Camera.worldToScreen(infinity::Vector3(x * 30,0, y * 30), cur);
-        if(pre.x>0)
+        float y = x * x - 4;
+        g_Camera.worldToScreen(infinity::Vector3(x * g_scale, 0, y * g_scale), cur);
+        if (pre.x > 0)
             ImGui::GetForegroundDrawList()->AddLine(pre, cur, ImColor(0, 255, 0, 0xff), 2);
-
     }
 }
 
@@ -74,16 +85,28 @@ void drawCube(const Vector3& worldLocation, float cubeSize, const ImColor &color
             ImGui::GetForegroundDrawList()->AddLine(topCur, bottomCur, color, 2);
         }
     }
+}
 
+void drawFunction(fun_callback f, const ImColor& color, const float& thickness = 1.0f, const float begin = -axisXmax, const float& end = axisXmax, bool mainZ = true) {
+    Vector2 pre, cur;
+    for (float x = begin; x <= end; x += 0.1f, pre = cur) {
+        float y = f(x);
+        Vector3 vector = mainZ ? Vector3(x, 0.0f, y) : Vector3(x , y, 0.0f);
+        if (g_Camera.worldToScreen(vector, cur)) {
+            if (pre.x > 0.0f) {
+                ImGui::GetForegroundDrawList()->AddLine(pre, cur, color, thickness);
+            }
+        }
+    }
 }
 
 VOID RenderCallBack() {
     
     ImGui::Begin("Infinity 3DSpace");
-    ImGui::SetWindowSize(ImVec2(g_mWindowRect.w, 300));
+    ImGui::SetWindowSize(ImVec2(g_mWindowRect.w, 300.0f));
     ImGui::SetWindowPos(ImVec2(0, g_mWindowRect.h - 300));
 
-    ImGui::GetForegroundDrawList()->AddRectFilled(ImVec2(0, 0), g_SpaceRenderSize, ImColor(0x69, 0x69, 0x69));
+    ImGui::GetForegroundDrawList()->AddRectFilled(ImVec2(0, 0), ImVec2(g_mWindowRect.w, g_mWindowRect.h - 300), ImColor(0x59, 0x59, 0x59));
 
     ImGui::Text("Current application fps:%f", ImGui::GetIO().Framerate);
     
@@ -98,6 +121,12 @@ VOID RenderCallBack() {
     ImGui::Checkbox("Auto    yaw", &auto_rotate.yaw); ImGui::SameLine(); ImGui::SliderFloat("Yaw", &g_Yaw, -180.0f, 180.0f);
     g_Camera.setRotation(g_Roll * M_RAD, g_Pitch * M_RAD, g_Yaw * M_RAD);
 
+    if (auto_rotate.pitch) {
+        static bool reverse = false;
+        if (g_Pitch <= -180.0f)reverse = true;
+        else if (g_Pitch >= 180.0f)reverse = false;
+        reverse ? g_Pitch++ : g_Pitch--;
+    }
     
     ImGui::NewLine();
     ImGui::Text("CameraTranslation");
@@ -108,43 +137,70 @@ VOID RenderCallBack() {
     
     static infinity::Vector2 axisBegin,axisEnd;
     static infinity::Vector2 quadrantVertex[4];
-
     //++rotateAngle;
 
-    g_Camera.worldToScreen(Vector3(99.0f, 99.0f, 0), quadrantVertex[0]);
-    g_Camera.worldToScreen(Vector3(-99.0f, 99.0f, 0), quadrantVertex[1]);
-    g_Camera.worldToScreen(Vector3(-99.0f, -99.0f, 0), quadrantVertex[2]);
-    g_Camera.worldToScreen(Vector3(99.0f, -99.0f, 0), quadrantVertex[3]);
-    ImGui::GetForegroundDrawList()->AddPolyline(quadrantVertex, 4, ImColor(0.0f, 1.0f, 1.0f), 1, 2.0f);
+    if (g_Camera.worldToScreen(Vector3(-axisXmax - 5.0f, 0.0f, 0), axisBegin)) {
+        if (g_Camera.worldToScreen(infinity::Vector3(axisXmax + 5.0f, 0.0f, 0.0f), axisEnd)) {
 
-    if (g_Camera.worldToScreen(infinity::Vector3(-99.0f, 0.0f, 0.0f), axisBegin)) {
-        if (g_Camera.worldToScreen(infinity::Vector3(99.0f, 0.0f, 0.0f), axisEnd)) {
             ImGui::GetForegroundDrawList()->AddLine(axisBegin, axisEnd, ImColor(1.0f, 0.0f, 0.0f), 3.0f);
             ImGui::GetForegroundDrawList()->AddText(axisBegin, ImColor(1.0f, 0.0f, 0.0f), "-X");
             ImGui::GetForegroundDrawList()->AddText(axisEnd, ImColor(1.0f, 0.0f, 0.0f), "X");
         }
     }
-    if (g_Camera.worldToScreen(infinity::Vector3(0.0f, -99.0f, 0.0f), axisBegin)) {
-        if (g_Camera.worldToScreen(infinity::Vector3(0.0f, 99.0f, 0.0f), axisEnd)) {
+    if (g_Camera.worldToScreen(infinity::Vector3(0.0f, -axisYmax - 5.0f, 0.0f), axisBegin)) {
+        if (g_Camera.worldToScreen(infinity::Vector3(0.0f, axisYmax + 5.0f, 0.0f), axisEnd)) {
 
             ImGui::GetForegroundDrawList()->AddLine(axisBegin, axisEnd, ImColor(0.0f, 1.0f, 0.0f), 3.0f);
             ImGui::GetForegroundDrawList()->AddText(axisBegin, ImColor(0.0f, 1.0f, 0.0f), "-Y");
             ImGui::GetForegroundDrawList()->AddText(axisEnd, ImColor(0.0f, 1.0f, 0.0f), "Y");
 
+            
         }
     }
-    if (g_Camera.worldToScreen(infinity::Vector3(0.0f, 0.0f, -99.0f), axisBegin)) {
-        if (g_Camera.worldToScreen(infinity::Vector3(0.0f, 0.0f, 99.0f), axisEnd)) {
+    if (g_Camera.worldToScreen(infinity::Vector3(0.0f, 0.0f, -axisZmax), axisBegin)) {
+        if (g_Camera.worldToScreen(infinity::Vector3(0.0f, 0.0f, axisZmax), axisEnd)) {
             ImGui::GetForegroundDrawList()->AddLine(axisBegin, axisEnd, ImColor(0.0f, 0.0f, 1.0f), 3.0f);
 
-            ImGui::GetForegroundDrawList()->AddText(axisBegin, ImColor(0.0f, 0.0f, 1.0f), "-Z");
-            ImGui::GetForegroundDrawList()->AddText(axisEnd, ImColor(0.0f, 0.0f, 1.0f), "Z");
+            //ImGui::GetForegroundDrawList()->AddText(axisBegin, ImColor(0.0f, 0.0f, 1.0f), "-Z");
+            //ImGui::GetForegroundDrawList()->AddText(axisEnd, ImColor(0.0f, 0.0f, 1.0f), "Z");
+        }
+    }
+
+    g_Camera.worldToScreen(Vector3(100.0f, 100.0f, 0), quadrantVertex[0]);
+    g_Camera.worldToScreen(Vector3(-100.0f, 100.0f, 0), quadrantVertex[1]);
+    g_Camera.worldToScreen(Vector3(-100.0f, -100.0f, 0), quadrantVertex[2]);
+    g_Camera.worldToScreen(Vector3(100.0f, -100.0f, 0), quadrantVertex[3]);
+    ImGui::GetForegroundDrawList()->AddPolyline(quadrantVertex, 4, ImColor(0.0f, 1.0f, 1.0f), 1, 2.0f);
+
+    for (float variable = -axisXmax,zScale = axisZmax / 100.0f; variable <= axisXmax; variable += g_scale) {
+
+        if (std::abs(0.0f - variable) <= 1e-1f)
+            continue;
+
+        Vector2 rulur;
+
+        float var = variable - (variable < 0.0f ? g_Pitch>0.0f ? 2.5f : -2.5f : 0.0f);//优化刻度的负号所占据的像素
+
+        if (g_Camera.worldToScreen(Vector3(var, 0.0f, -8.0f), rulur)) {
+            ImColor color = ImColor(1.0f, 0.0f, 0.0f);
+            ImGui::GetForegroundDrawList()->AddText(rulur, color, to_string(int(variable / g_scale)).c_str());
+            ImGui::GetForegroundDrawList()->AddLine(ImVec2(rulur.x, rulur.y), ImVec2(rulur.x, rulur.y - 4), color);
+        }
+        
+        if (g_Camera.worldToScreen(Vector3(0.0f, var, -8.0f), rulur)) {
+            ImGui::GetForegroundDrawList()->AddText(rulur, ImColor(0.0f, 1.0f, 0.0f), to_string(int(variable / g_scale)).c_str());
+        }
+
+        //z轴缩放有点特殊单独处理一下
+        if (g_Camera.worldToScreen(Vector3(3.0f, 0.0f, variable * zScale), rulur)) {
+            ImGui::GetForegroundDrawList()->AddText(rulur, ImColor(1.0f, 0.5f, 0.5f), to_string(int((zScale* variable) / g_scale)).c_str());
         }
     }
 
     //drawHeart();
     drawPhysicsLine();
-    drawCube(Vector3(0, 0, -99), 5, ImColor(0xFF, 0xFF, 0, 0xFF));
+    drawFunction(line, ImColor(0.0f, 1.0f, 1.0f));
+    drawCube(Vector3(0, 0, -axisZmax), 5, ImColor(0xFF, 0xFF, 0, 0xFF));
 
     ImGui::End();
 

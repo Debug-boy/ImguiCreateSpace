@@ -6,7 +6,7 @@ IDXGISwapChain* g_pSwapChain = NULL;
 ID3D11RenderTargetView* g_mainRenderTargetView = NULL;
 WNDCLASSEX g_wndclassEx;
 HWND g_mImguiDrawWindow = NULL;
-M_RECT<LONG>g_mWindowRect = { 0,0,1600,800 };
+M_RECT<LONG>g_mWindowRect = { 0,0,1600,1000 };
 HWND g_bindWndObject = NULL;
 
 // Helper functions

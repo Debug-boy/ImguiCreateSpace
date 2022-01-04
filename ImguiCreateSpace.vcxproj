@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Axis.hpp" />
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="imgui\include\imconfig.h" />
     <ClInclude Include="imgui\include\imgui.h" />

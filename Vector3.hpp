@@ -11,7 +11,7 @@ namespace infinity {
 
 		Vector3() :x(), y(), z() {}
 
-		Vector3(float _x, float _y, float _z) {
+		Vector3(const float& _x, const float& _y, const float& _z) {
 			this->x = _x;
 			this->y = _y;
 			this->z = _z;
