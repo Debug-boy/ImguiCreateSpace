@@ -88,8 +88,9 @@ namespace infinity {
 				(cameraRotate.m32 * worldLocation.y) + 
 				(cameraRotate.m33 * worldLocation.z) + cameraTanslate.z;
 
-			viewZ = 1.0f / viewZ;
+			if (viewZ < 0.01f)viewZ = -viewZ;
 
+			viewZ = 1.0f / viewZ;
 			screenPosition.x = sight.x + (
 				(cameraRotate.m11 * worldLocation.x) +
 				(cameraRotate.m12 * worldLocation.y) +
@@ -98,7 +99,7 @@ namespace infinity {
 			screenPosition.y = sight.y - (
 				(cameraRotate.m21 * worldLocation.x) +
 				(cameraRotate.m22 * worldLocation.y) +
-				(cameraRotate.m23 * worldLocation.z) + cameraTanslate.y) * sight.y * viewZ;
+				(cameraRotate.m23 * worldLocation.z) + cameraTanslate.y) * sight.y * viewZ * 2;
 			return true;
 		}
 

@@ -44,5 +44,9 @@ namespace infinity {
 			return (this->x * vector.x) + (this->y * vector.y) + (this->z * vector.z);
 		}
 
+		Vector3 operator * (const float& u) {
+			return Vector3((this->x * u) , (this->y * u),(this->z * u));
+		}
+
 	};
 }

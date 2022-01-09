@@ -1,4 +1,5 @@
 #pragma once
+#include "Vector3.hpp"
 namespace infinity {
     struct Matrix3x3 {
         union {
@@ -25,5 +26,14 @@ namespace infinity {
             matrix.m33 = (matrixA.m31 * m13) + (matrixA.m32 * m23) + (matrixA.m33 * m33);
             return matrix;
         }
+
+        Vector3 operator * (const Vector3& vector3) const {
+            Vector3 vector;
+            vector.x = m11 * vector3.x + m12 * vector3.y + m13 * vector3.z;
+            vector.y = m21 * vector3.x + m22 * vector3.y + m23 * vector3.z;
+            vector.z = m31 * vector3.x + m32 * vector3.y + m33 * vector3.z;
+            return vector;
+        }
+
     };
 }

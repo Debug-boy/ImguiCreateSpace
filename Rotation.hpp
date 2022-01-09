@@ -84,6 +84,14 @@ namespace infinity {
 			getYawMatrix(matrix, m_yaw);
 		}
 
+		void rotateToWorld(const Vector3& vector,Vector3& out) {
+			Matrix3x3 matrix_x, matrix_y, mstrix_z;
+			getRollMatrix(matrix_x);
+			getPitchMatrix(matrix_y);
+			getYawMatrix(mstrix_z);
+			out = ((matrix_x * matrix_y * mstrix_z)) * vector;
+		}
+
 		void setRoll(const float& roll) {
 			m_roll = roll;
 		}
