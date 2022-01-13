@@ -198,37 +198,26 @@ public:
         mSize = size;
     }
  
-    void render(bool isHash = true,double trackSize = 0.0) {
-        //Vector3 temp, temp2;
-        //mAngle += mSpeed * M_RAD;
-        //mRotate.setYaw(-mAngle);
-        //mRotate.setRoll(trackOffsetAngle * M_RAD);
+    void render(bool isHash = true, double trackSize = 0.0, float trackOffsetAngle = 1.0f) {
+        Vector3 temp, temp2;
+        mAngle += mSpeed * M_RAD;
+        mRotate.setYaw(-mAngle);
+        mRotate.setRoll(trackOffsetAngle * M_RAD);
 
-        //if (trackOffsetAngle > 0) {
-        //    mRotate.setYaw(0);
-        //}
+        Vector2 namePos;
+        Vector3 tempPosition(cos(mAngle) * trackSize, sin(mAngle) * trackSize, 0);
+        Vector3 nameWorldPos(cos(mAngle * 2) * trackSize * g_scale,sin(mAngle * 2) * trackSize * g_scale, worldPosition.z);
 
-        //Vector2 namePos;
-        //Vector3 tempPosition(cos(mAngle) * trackSize, sin(mAngle) * trackSize, 0);
-        //Vector3 nameWorldPos(cos(mAngle * 2) * trackSize * g_scale,sin(mAngle * 2) * trackSize * g_scale, worldPosition.z);
+        mRotate.rotateToWorld(tempPosition, temp);
+        drawBall(temp, mRotate, true, mColor, mSize, isHash);
 
-        //mRotate.rotateToWorld(tempPosition, temp);
-        //drawBall(temp, mRotate, true, mColor, mSize, isHash);
 
-        //if (trackOffsetAngle > 0) {
-        //    mRotate.setYaw(0);
-        //    mRotate.setRoll(-trackOffsetAngle * M_RAD);
-        //    mRotate.setPitch(-trackOffsetAngle * M_RAD);
-        //    nameWorldPos.reset(cos(mAngle + trackOffsetAngle *M_RAD) * trackSize * g_scale, 
-        //        sin(mAngle + trackOffsetAngle * M_RAD) * trackSize * g_scale, worldPosition.z);
-        //}
+        mRotate.rotateToWorld(nameWorldPos, temp2);
+        g_Camera.worldToScreen(temp2, namePos);
 
-        //mRotate.rotateToWorld(nameWorldPos, temp2);
-        //g_Camera.worldToScreen(temp2, namePos);
-
-        //ImGui::GetForegroundDrawList()->AddText(namePos, ImColor(0xff, 0xff, 0xff, 0xff), mName.c_str());
-        drawBall(worldPosition, mRotate, true, mColor, mSize, isHash);
-        drawCircle(worldPosition, trackSize, trackRotate, mColor, 2.0f);
+        ImGui::GetForegroundDrawList()->AddText(namePos, ImColor(0xff, 0xff, 0xff, 0xff), mName.c_str());
+        //drawBall(worldPosition, mRotate, true, mColor, mSize, isHash);
+        drawCircle(Vector3(0,0,0), trackSize, trackRotate, mColor, 2.0f);
     }
 
 };
@@ -337,12 +326,14 @@ VOID RenderCallBack() {
     //drawPhysicsLine();
     static float xxx,yyy,zzz;
     static float xxx1, yyy1, zzz1;
+    static float transx;
     ImGui::SliderFloat("tarck_xxx", &xxx, -180.0f, 180.0f);
     ImGui::SliderFloat("tarck_yyy", &yyy, -180.0f, 180.0f);
     ImGui::SliderFloat("tarck_zzz", &zzz, -180.0f, 180.0f);
     ImGui::SliderFloat("m_xxx1", &xxx1, -180.0f, 180.0f);
     ImGui::SliderFloat("m_yyy1", &yyy1, -180.0f, 180.0f);
     ImGui::SliderFloat("m_zzz1", &zzz1, -180.0f, 180.0f);
+    ImGui::SliderFloat("transx", &transx, -180.0f, 180.0f);
    // drawCircle(Vector3(0, 0, 0), 2, Rotation(xxx * M_RAD, yyy * M_RAD, zzz * M_RAD), ImColor(0xff, 0, 0, 0xff));
 
     //drawBall(Vector3(0, 0, 0), ImColor(0xff, 0x0, 0x0, 0xff), 3);//sun
@@ -359,21 +350,22 @@ VOID RenderCallBack() {
     //drawBall2(Vector3(0, 0, 0), ImColor(0xff, 0x0, 0x0, 0xff), 6.0);
 
     static Planet sun2("sun", Vector3(5, 5, 0), 4.0, 0.197f, ImColor(0xff, 0x0, 0x0, 0xff));
-    sun2.trackRotate.set(xxx* M_RAD, yyy* M_RAD, zzz* M_RAD);
-    sun2.mRotate.set(xxx1* M_RAD, yyy1* M_RAD, zzz1* M_RAD);
-    sun2.render(false, 4);
+    //static Planet sun2("sun", Vector3(0, 0, 0), 4.0, 0.197f, ImColor(0xff, 0x0, 0x0, 0xff));
+    //sun2.trackRotate.set(xxx* M_RAD, yyy* M_RAD, zzz* M_RAD);
+    //sun2.mRotate.set(xxx1* M_RAD, yyy1* M_RAD, zzz1* M_RAD);
+    //sun2.render(false, 4, transx);
 
 
-    //sun.render(false, 0);
-    //sun.mRotate.set(xxx * M_RAD, yyy * M_RAD, zzz * M_RAD);
-    //mercury.render(true, 13, xxx);
-    //venus.render(true, 16, 3.4 * 10 * M_RAD);
-    //eath.render(true, 26, 0);
-    //mars.render(true, 32, 0.093 * 10 * M_RAD);
-    //jupiter.render(true, 46);
-    //saturn.render(true, 54);
-    //uranus.render(true, 62);
-    //neptune.render(true, 80);
+    sun.render(false, 0);
+    sun.mRotate.set(xxx * M_RAD, yyy * M_RAD, zzz * M_RAD);
+    mercury.render(true, 13, xxx);
+    venus.render(true, 16, 3.4 * 10 * M_RAD);
+    eath.render(true, 26, 0);
+    mars.render(true, 32, 0.093 * 10 * M_RAD);
+    jupiter.render(true, 46);
+    saturn.render(true, 54);
+    uranus.render(true, 62);
+    neptune.render(true, 80);
     //drawCircle(Vector3(0, 0, 0), 5, Rotation(0, 0, 0), ImColor(208, 160, 0x0, 0xff), 2.0f);
 
    

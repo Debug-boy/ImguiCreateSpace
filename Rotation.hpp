@@ -1,5 +1,6 @@
 #pragma once
 #include "Matrix3x3.hpp"
+#include "Translation.hpp"
 
 namespace infinity {
 
@@ -78,18 +79,18 @@ namespace infinity {
 			matrix.m31 = 0.0f;
 			matrix.m32 = 0.0f;
 			matrix.m33 = 1.0f;
-		}
+		} 
 
 		void getYawMatrix(Matrix3x3& matrix) const{
 			getYawMatrix(matrix, m_yaw);
 		}
 
-		void rotateToWorld(const Vector3& vector,Vector3& out) {
+		void rotateToWorld(const Vector3& vector, Vector3& out, float scale_x = 1.0f, float scale_y = 1.0f, float scale_z = 1.0f) {
 			Matrix3x3 matrix_x, matrix_y, mstrix_z;
 			getRollMatrix(matrix_x);
 			getPitchMatrix(matrix_y);
 			getYawMatrix(mstrix_z);
-			out = ((matrix_x * matrix_y * mstrix_z)) * vector;
+			out = ((matrix_x * matrix_y * mstrix_z)) *  vector;
 		}
 
 		void setRoll(const float& roll) {
